@@ -1,0 +1,55 @@
+version: 2 
+
+semantic_models:
+  - name: attrition_rate
+    model: ref('mtr_attrition_rate')
+    description: "Semantic model including data from all employees who left the company."
+    defaults:
+      agg_time_dimension: termination_date
+
+    entities:
+      - name: employee_id 
+        type: primary
+        expr: employee_id 
+
+    dimensions:         
+        - name: termination_date
+          type: time
+          description: Date of when the employee had its last day. 
+          expr: case when termination_date is not null
+          type_params: 
+            time_granularity: day 
+
+        - name: employee_id
+          type: categorical
+          description: Unique identifier for each employee.
+
+    measures: 
+      - name: terminated_count
+        description: "The total count for the employees that left the company."
+        agg: count_distinct
+        expr: employee_id
+        agg_time_dimension: termination_date
+
+      - name: total_count
+        description: "The total count of the current employees within the company."
+        agg: count_distinct
+        expr: employee_id
+        agg_time_dimension: termination_date 
+
+  - name: job_satisfaction_by_role
+    model: ref('mtr_job_satisfaction_by_role')
+    description: "Model created to analyze job satisfaction segregated by role, and it relation with attrition."
+
+    entities:
+      - name: employee_id
+        type: primary
+        expr: employee_id
+
+    dimensions:
+      - name: role
+        type: categorical
+
+  - name: work_life_balance
+    model: ref('mtr_work_life_balance_impact_by_department')
+    description: "Model use to measure how is the balance going between office and home-office time"
