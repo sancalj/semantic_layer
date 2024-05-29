@@ -10,4 +10,4 @@ with job_satisfaction as (
         on e.employee_id = s.employee_id
 )
 select *
-from employee_satisfaction
+from job_satisfaction
