@@ -2,6 +2,7 @@ with job_satisfaction as (
     select
         e.employee_id,
         w.role,
+        w.termination_date,
         s.job_satisfaction
     from {{ ref('stg_employees') }} e
     left join {{ ref('stg_work_profile') }} w 
@@ -11,3 +12,4 @@ with job_satisfaction as (
 )
 select *
 from job_satisfaction
+
