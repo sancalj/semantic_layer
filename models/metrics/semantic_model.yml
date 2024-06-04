@@ -1,0 +1,96 @@
+version: 2 
+
+semantic_models: 
+## MODEL 1 
+  - name: attrition_rate
+    model: ref('mtr_employee')
+    description: "Semantic model used to calculate attrition based on different attributes"
+    defaults:
+      agg_time_dimension: termination_date
+
+    entities: 
+      - name: employee_id
+        type: primary
+        expr: employee_id
+      - name: depto
+        type: foreign
+        expr: deparment
+      - name: role
+        type: foreign
+        expr: role
+      - name: gender
+        type: foreign
+        expr: gender
+
+    dimensions: 
+      - name: termination_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: hire_date
+        type: time
+        type_params:
+          time_granularity: day
+
+    measures: 
+      - name: attrition_rate
+        description: "Total attrition reported for all employees."
+        agg: percentile
+        agg_params:
+          percentile: .99
+          use_discrete_percentile: False
+      
+      - name: total_employees
+        description: "Total count of employees within the company."
+        agg: count_distinct
+ 
+# MODEL 2 
+
+  - name: job_datisfaction
+    model: ref('mtr_job_satisfaction')
+    description: "Semantic model use to visualize the possible relation between attrition and job satisfaction."
+    defaults:
+      agg_time_dimension: termination_date
+
+    entities:
+      - name: emp_id
+        type: primary
+        expr: employee_id
+      - name: depto
+        type: foreign
+        expr: deparment
+      - name: role
+        type: foreign
+        expr: role
+      - name: gender
+        type: foreign
+        expr: gender
+
+    dimensions:
+      - name: hire_date
+        type: time
+        expr: hire_date
+        type_params:
+          time_granularity: day
+      - name: termination_date 
+        type: time
+        expr: termination_Date
+        type_params:
+          time_granularity: day
+      - name: job_satisfaction
+        type: categorical
+        expr: job_satisfaction
+      
+      - name: attrition
+        type: categorical
+
+    measures: 
+      - name: total_emp
+        description: Total count of employees
+        expr: employee_id
+        agg: count_distinct 
+
+      - name: avg_satisfaction
+        description:
+        expr: job_satisfaction
+        agg: average  
