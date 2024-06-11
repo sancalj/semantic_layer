@@ -42,6 +42,8 @@ models:
       +materialized: table
     models/metrics: 
       +materialized: table
+    models/python:
+      +materialized: table
 
 
 semantic-models:
