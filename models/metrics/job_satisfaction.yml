@@ -1,0 +1,20 @@
+metrics: 
+  - name: average_satisfaction
+    description: general average response
+    type: simple
+    label: Average Satisfaction
+    type_params:
+      measure: 
+        name: avg_satisfaction
+
+  - name: avg_satisfaction_role
+    description: role average response on job satisfaction. 
+    type: simple
+    label: Average Satisfaction by Role
+    type_params:
+      measure: 
+        name: avg_satisfaction # The measure creating a proxy of.
+        fill_nulls_with: 0 
+        join_to_timespine: true
+    filter: |
+      {{ Metric('avg_satisfaction', group_by = ['role']) }}

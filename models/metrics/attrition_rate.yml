@@ -1,0 +1,46 @@
+metrics: 
+  - name: attrition_rate
+    type: simple
+    label: Total Attrition
+    type_params:
+      measure: 
+        name: attrition_rate
+        fill_nulls_with: 0 
+        join_to_timespine: true 
+
+  - name: attrition_by_department
+    description: total attrition by department
+    type: simple # Pointers to a measure created in a semantic model
+    label: Attrition by department
+    type_params:
+      measure: 
+        name: attrition_rate # The measure creating a proxy of.
+        fill_nulls_with: 0 
+        join_to_timespine: true
+    filter: |
+      {{ Metric('attrition_rate', group_by = ['department']) }}
+
+  - name: attrition_by_gender
+    description: total attrition by gender.
+    type: simple 
+    label: Attrition by Gender
+    type_params:
+      measure: 
+        name: attrition_rate 
+        fill_nulls_with: 0 
+        join_to_timespine: true
+    filter: |
+      {{ Metric('attrition_rate', group_by = ['gender']) }}
+
+  - name: attrition_by_role
+    description: total attrition by role.
+    type: simple 
+    label: Attrition by role
+    type_params:
+      measure: 
+        name: attrition_rate 
+        fill_nulls_with: 0 
+        join_to_timespine: true
+    filter: |
+      {{ Metric('attrition_rate', group_by = ['role']) }}
+  
